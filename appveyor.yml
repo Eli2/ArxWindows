@@ -1,0 +1,33 @@
+version: '{build}'
+
+environment:
+  arx-libs: >
+    c:\arx\ArxWindows\libs\zlib;
+    c:\arx\ArxWindows\libs\freetype;
+    c:\arx\ArxWindows\libs\openal;
+    c:\arx\ArxWindows\libs\boost;
+    c:\arx\ArxWindows\libs\glm;
+    c:\arx\ArxWindows\libs\opengl;
+    c:\arx\ArxWindows\libs\sdl;
+    c:\arx\ArxWindows\libs\dbghelp
+
+os: Visual Studio 2015 CTP 6
+
+clone_depth: 1
+clone_folder: c:\arx\ArxWindows
+
+init:
+  - git config --global core.autocrlf input
+
+
+before_build:
+  - echo Cloning arx repo
+  - cd c:\arx\
+  - git clone --depth 10 git://github.com/arx/ArxLibertatis.git
+  - mkdir thebuild
+  - cd thebuild
+  - echo Running cmake...
+  - cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_PREFIX_PATH=%arx-libs% c:\arx\ArxLibertatis
+
+build:
+  project: ArxLibertatis.sln
